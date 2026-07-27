@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FA Tech Studio | Senior Web Developer & WordPress Specialist</title>
+    <meta name="description" content="Portfolio of FA Tech Studio - Web Developer specializing in E-Commerce, Appointment Websites, Frontend Development & Custom WordPress Themes.">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyberDark: '#030712',
+                        cyberLight: '#F8FAFC',
+                        neonCyan: '#00E5FF',
+                        neonPurple: '#7C3AED',
+                        cyberCardDark: 'rgba(15, 23, 42, 0.75)',
+                        cyberCardLight: 'rgba(255, 255, 255, 0.85)',
+                    },
+                    boxShadow: {
+                        'neon-cyan': '0 0 20px rgba(0, 229, 255, 0.35)',
+                        'neon-purple': '0 0 20px rgba(124, 58, 237, 0.35)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            transition: background-color 0.4s ease, color 0.4s ease;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #F1F5F9;
+        }
+        .light .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            color: #0F172A;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark .glass-card:hover {
+            border-color: rgba(0, 229, 255, 0.5);
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
+        }
+        .light .glass-card:hover {
+            border-color: rgba(124, 58, 237, 0.4);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #00E5FF 0%, #7C3AED 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #spotlight {
+            pointer-events: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 10;
+        }
+        .dark #spotlight {
+            background: radial-gradient(600px circle at var(--x, 50%) var(--y, 50%), rgba(0, 229, 255, 0.08), transparent 80%);
+        }
+        .light #spotlight {
+            background: radial-gradient(600px circle at var(--x, 50%) var(--y, 50%), rgba(124, 58, 237, 0.08), transparent 80%);
+        }
+
+        .cyber-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+        .light .cyber-grid {
+            background-image: 
+                linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        }
+
+        /* Pulsing Glow Animation for Header Logo */
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(0, 229, 255, 0.4), inset 0 0 10px rgba(124, 58, 237, 0.3);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(0, 229, 255, 0.7), inset 0 0 15px rgba(0, 229, 255, 0.5);
+                transform: scale(1.03);
+            }
+        }
+        .animated-logo-box {
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen bg-cyberDark text-slate-100 dark:bg-cyberDark dark:text-slate-100 cyber-grid">
+
+    <!-- Mouse Spotlight Overlay -->
+    <div id="spotlight"></div>
+
+    <!-- Canvas Particle Animation -->
+    <canvas id="bgCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-card border-b">
+        <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-neonCyan to-neonPurple p-0.5 animated-logo-box flex items-center justify-center shrink-0">
+                    <div class="w-full h-full bg-cyberDark rounded-[10px] flex items-center justify-center">
+                        <span class="text-xs font-black text-gradient tracking-tighter">FA</span>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-lg font-extrabold tracking-wider text-gradient leading-tight">FA TECH</span>
+                    <span class="text-[9px] tracking-widest uppercase opacity-75 font-semibold">STUDIO</span>
+                </div>
+            </a>
+            
+            <nav class="hidden lg:flex space-x-6 text-sm font-medium">
+                <a href="#about" class="hover:text-neonCyan transition">About</a>
+                <a href="#why-hire-me" class="hover:text-neonCyan transition">Why Hire Me</a>
+                <a href="#experience" class="hover:text-neonCyan transition">Experience</a>
+                <a href="#skills" class="hover:text-neonCyan transition">Skills</a>
+                <a href="#services" class="hover:text-neonCyan transition">Services</a>
+                <a href="#projects" class="hover:text-neonCyan transition">Projects</a>
+                <a href="#testimonials" class="hover:text-neonCyan transition">Reviews</a>
+                <a href="#faq" class="hover:text-neonCyan transition">FAQ</a>
+                <a href="#contact" class="hover:text-neonCyan transition">Contact</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <button id="themeToggle" class="p-2 rounded-full glass-card hover:text-neonCyan transition border" title="Toggle Light/Dark Theme">
+                    <i data-lucide="sun" id="sunIcon" class="w-5 h-5 hidden"></i>
+                    <i data-lucide="moon" id="moonIcon" class="w-5 h-5"></i>
+                </button>
+                
+                <a href="#contact" class="px-4 py-2 rounded-full border border-neonCyan text-neonCyan hover:bg-neonCyan/10 transition shadow-neon-cyan text-sm font-semibold">
+                    Hire Me
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative z-10 min-h-screen flex items-center justify-center pt-24 px-6">
+        <div class="max-w-4xl mx-auto text-center space-y-8">
+            <div class="inline-block p-1 rounded-3xl bg-gradient-to-r from-neonCyan to-neonPurple mb-2 animated-logo-box">
+                <div class="w-32 h-32 rounded-[22px] bg-cyberDark flex items-center justify-center border-2 border-neonCyan/50 mx-auto shadow-neon-cyan">
+                    <span class="text-4xl font-black text-gradient tracking-tight">FA</span>
+                </div>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight">
+                Hi, I'm <span class="text-gradient">Fahad Ali</span>
+            </h1>
+            
+            <p class="text-2xl md:text-3xl font-semibold opacity-90">
+                Web Developer & <span id="typewriter" class="text-neonCyan border-b-2 border-neonCyan"></span>
+            </p>
+
+            <p class="opacity-75 max-w-2xl mx-auto text-lg leading-relaxed">
+                Specializing in custom e-commerce stores, appointment booking websites, dynamic WordPress themes with admin panels, and responsive web applications.
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-4 pt-4">
+                <a href="#contact" class="px-8 py-3 rounded-lg bg-gradient-to-r from-neonCyan to-neonPurple text-cyberDark font-bold hover:opacity-95 transition shadow-neon-cyan">Hire Me</a>
+                <a href="#projects" class="px-8 py-3 rounded-lg glass-card hover:text-neonCyan transition border">View Projects</a>
+                <a href="#" class="px-8 py-3 rounded-lg glass-card hover:text-neonPurple transition border">Download Resume</a>
+            </div>
+
+            <!-- Key Metrics Bar -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8">
+                <div class="glass-card p-4 rounded-xl">
+                    <p class="text-3xl font-extrabold text-neonCyan">1.5+</p>
+                    <p class="text-xs opacity-75 uppercase tracking-wider">Years Experience</p>
+                </div>
+                <div class="glass-card p-4 rounded-xl">
+                    <p class="text-3xl font-extrabold text-neonPurple">10+</p>
+                    <p class="text-xs opacity-75 uppercase tracking-wider">Projects Delivered</p>
+                </div>
+                <div class="glass-card p-4 rounded-xl">
+                    <p class="text-3xl font-extrabold text-neonCyan">100%</p>
+                    <p class="text-xs opacity-75 uppercase tracking-wider">Mobile Responsive</p>
+                </div>
+                <div class="glass-card p-4 rounded-xl">
+                    <p class="text-3xl font-extrabold text-neonPurple">24/7</p>
+                    <p class="text-xs opacity-75 uppercase tracking-wider">Technical Support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section id="about" class="relative z-10 py-20 px-6 max-w-5xl mx-auto">
+        <div class="glass-card rounded-2xl p-8 md:p-12 space-y-6">
+            <h2 class="text-3xl font-bold text-gradient flex items-center gap-3">
+                <i data-lucide="user-check" class="text-neonCyan"></i> About Me
+            </h2>
+            <p class="opacity-80 text-lg leading-relaxed">
+                I am Fahad Ali, a Senior Web Developer and WordPress Specialist with over 1.5 years of experience across frontend web development, custom e-commerce builds, booking/appointment platforms, and computer operations. My expertise lies in building high-performing online stores, integrated scheduling engines, and converting web design files into fully dynamic WordPress themes with custom admin panels.
+            </p>
+        </div>
+    </section>
+
+    <!-- Why Hire Me Section -->
+    <section id="why-hire-me" class="relative z-10 py-20 px-6 max-w-6xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-gradient">Why Hire Me?</h2>
+            <p class="opacity-80 text-base md:text-lg">
+                I deliver versatile web solutions tailored to business goals—from complete online retail systems and booking platforms to pixel-perfect theme conversions.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Pillar 1 -->
+            <div class="glass-card p-8 rounded-2xl space-y-4 border hover:border-neonCyan transition duration-300">
+                <div class="w-14 h-14 rounded-xl bg-neonCyan/10 border border-neonCyan/30 flex items-center justify-center text-neonCyan">
+                    <i data-lucide="shopping-cart" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-bold">E-Commerce & Online Stores</h3>
+                <p class="opacity-80 text-sm leading-relaxed">
+                    Proven expertise in building high-converting e-commerce websites powered by WooCommerce or custom storefronts, featuring cart systems, payment gateways, and inventory management.
+                </p>
+                <ul class="text-xs text-neonCyan space-y-1 font-medium pt-2">
+                    <li>• Secure payment gateway integration</li>
+                    <li>• Custom product filters & categories</li>
+                    <li>• Optimized checkout flow</li>
+                </ul>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="glass-card p-8 rounded-2xl space-y-4 border hover:border-neonPurple transition duration-300">
+                <div class="w-14 h-14 rounded-xl bg-neonPurple/10 border border-neonPurple/30 flex items-center justify-center text-neonPurple">
+                    <i data-lucide="calendar" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-bold">Appointment & Booking Systems</h3>
+                <p class="opacity-80 text-sm leading-relaxed">
+                    Specialized in developing automated appointment and booking web applications for service-based businesses, complete with real-time availability calendars and email/SMS notifications.
+                </p>
+                <ul class="text-xs text-neonPurple space-y-1 font-medium pt-2">
+                    <li>• Real-time slot booking & calendars</li>
+                    <li>• Automated client reminders</li>
+                    <li>• Admin schedule management</li>
+                </ul>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="glass-card p-8 rounded-2xl space-y-4 border hover:border-neonCyan transition duration-300">
+                <div class="w-14 h-14 rounded-xl bg-neonCyan/10 border border-neonCyan/30 flex items-center justify-center text-neonCyan">
+                    <i data-lucide="file-code-2" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-bold">HTML to WordPress Theme Conversion</h3>
+                <p class="opacity-80 text-sm leading-relaxed">
+                    I convert static HTML/CSS/JS templates into dynamic WordPress themes. Every template file is modularized cleanly while preserving exact layout fidelity.
+                </p>
+                <ul class="text-xs text-neonCyan space-y-1 font-medium pt-2">
+                    <li>• Clean PHP template architecture</li>
+                    <li>• Dynamic WordPress menus & sidebars</li>
+                    <li>• Fast load speed optimization</li>
+                </ul>
+            </div>
+
+            <!-- Pillar 4 -->
+            <div class="glass-card p-8 rounded-2xl space-y-4 border hover:border-neonPurple transition duration-300">
+                <div class="w-14 h-14 rounded-xl bg-neonPurple/10 border border-neonPurple/30 flex items-center justify-center text-neonPurple">
+                    <i data-lucide="sliders" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-bold">Custom Admin Panel & Easy CMS</h3>
+                <p class="opacity-80 text-sm leading-relaxed">
+                    Custom theme options panels, ACF (Advanced Custom Fields), and Customizer options allow site owners to easily manage text, banners, and settings without code.
+                </p>
+                <ul class="text-xs text-neonPurple space-y-1 font-medium pt-2">
+                    <li>• Custom metaboxes & fields</li>
+                    <li>• Elementor / Gutenberg friendly</li>
+                    <li>• Intuitive admin dashboards</li>
+                </ul>
+            </div>
+
+            <!-- Pillar 5 -->
+            <div class="glass-card p-8 rounded-2xl space-y-4 border hover:border-neonCyan transition duration-300">
+                <div class="w-14 h-14 rounded-xl bg-neonCyan/10 border border-neonCyan/30 flex items-center justify-center text-neonCyan">
+                    <i data-lucide="smartphone" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-bold">Responsive & Mobile First</h3>
+                <p class="opacity-80 text-sm leading-relaxed">
+                    Every site is rigorously tested across smartphones, tablets, laptops, and ultra-wide screens to guarantee seamless cross-browser performance.
+                </p>
+                <ul class="text-xs text-neonCyan space-y-1 font-medium pt-2">
+                    <li>• Mobile-first CSS architecture</li>
+                    <li>• Cross-browser compatibility</li>
+                    <li>• Fast mobile rendering</li>
+                </ul>
+            </div>
+
+            <!-- Pillar 6 -->
+            <div class="glass-card p-8 rounded-2xl space-y-4 border hover:border-neonPurple transition duration-300">
+                <div class="w-14 h-14 rounded-xl bg-neonPurple/10 border border-neonPurple/30 flex items-center justify-center text-neonPurple">
+                    <i data-lucide="shield-check" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-bold">Post-Launch Support & Maintenance</h3>
+                <p class="opacity-80 text-sm leading-relaxed">
+                    Dedicated support ensuring continuous site updates, security hardening, bug resolution, and client onboarding after project delivery.
+                </p>
+                <ul class="text-xs text-neonPurple space-y-1 font-medium pt-2">
+                    <li>• Security updates & backups</li>
+                    <li>• Continuous performance checks</li>
+                    <li>• Reliable technical assistance</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Timeline -->
+    <section id="experience" class="relative z-10 py-20 px-6 max-w-5xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-gradient mb-12">Professional Timeline</h2>
+        <div class="space-y-8 relative before:absolute before:inset-0 before:left-4 md:before:left-1/2 before:-ml-0.5 before:w-0.5 before:bg-gradient-to-b before:from-neonCyan before:to-neonPurple">
+            
+            <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-cyberDark border-2 border-neonCyan text-neonCyan shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                    <i data-lucide="code-2" class="w-5 h-5"></i>
+                </div>
+                <div class="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] glass-card p-6 rounded-xl space-y-2">
+                    <h3 class="text-xl font-bold">Frontend & WordPress Specialist</h3>
+                    <p class="text-neonCyan text-sm font-semibold">Freelance & Client Projects</p>
+                    <ul class="text-sm opacity-80 list-disc list-inside space-y-1">
+                        <li>Developed e-commerce stores, appointment booking websites, and business portals.</li>
+                        <li>Converted HTML/CSS template packages into full WordPress themes with custom admin controls.</li>
+                        <li>Integrated payment systems, booking plugins, and custom WooCommerce setups.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-cyberDark border-2 border-neonPurple text-neonPurple shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                    <i data-lucide="award" class="w-5 h-5"></i>
+                </div>
+                <div class="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] glass-card p-6 rounded-xl space-y-2">
+                    <h3 class="text-xl font-bold">Academic Coordinator</h3>
+                    <p class="text-neonPurple text-sm font-semibold">1.5 Years Experience</p>
+                    <ul class="text-sm opacity-80 list-disc list-inside space-y-1">
+                        <li>Managed administrative workflows, academic schedules, and institutional records.</li>
+                        <li>Coordinated inter-departmental operations and student databases.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-cyberDark border-2 border-neonCyan text-neonCyan shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                </div>
+                <div class="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] glass-card p-6 rounded-xl space-y-2">
+                    <h3 class="text-xl font-bold">Computer Instructor</h3>
+                    <p class="text-neonCyan text-sm font-semibold">2.5 Years Experience</p>
+                    <ul class="text-sm opacity-80 list-disc list-inside space-y-1">
+                        <li>Taught computer fundamentals, office software, and web development basics.</li>
+                        <li>Evaluated student practical projects and maintained coursework materials.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-cyberDark border-2 border-neonPurple text-neonPurple shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                    <i data-lucide="database" class="w-5 h-5"></i>
+                </div>
+                <div class="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] glass-card p-6 rounded-xl space-y-2">
+                    <h3 class="text-xl font-bold">Data Entry Operator</h3>
+                    <p class="text-neonPurple text-sm font-semibold">2 Years Experience</p>
+                    <ul class="text-sm opacity-80 list-disc list-inside space-y-1">
+                        <li>Maintained databases, document formatting, and record verification.</li>
+                        <li>Utilized advanced MS Excel features for organizational reporting.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Skills Matrix -->
+    <section id="skills" class="relative z-10 py-20 px-6 max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-gradient mb-12">Technical Skills & Proficiency</h2>
+        
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="glass-card p-8 rounded-2xl space-y-6">
+                <h3 class="text-2xl font-bold text-neonCyan flex items-center gap-2">
+                    <i data-lucide="code" class="w-6 h-6"></i> Web Development & Platforms
+                </h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-sm font-medium mb-1">
+                            <span>Frontend (HTML5, CSS3, JS, Tailwind)</span>
+                            <span class="text-neonCyan">95%</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-neonCyan to-neonPurple w-[95%]"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-sm font-medium mb-1">
+                            <span>WordPress Custom Theme Development</span>
+                            <span class="text-neonCyan">92%</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-neonCyan to-neonPurple w-[92%]"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-sm font-medium mb-1">
+                            <span>E-Commerce & WooCommerce Systems</span>
+                            <span class="text-neonCyan">90%</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-neonCyan to-neonPurple w-[90%]"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-sm font-medium mb-1">
+                            <span>Appointment & Scheduling Platforms</span>
+                            <span class="text-neonCyan">88%</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-neonCyan to-neonPurple w-[88%]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl space-y-6">
+                <h3 class="text-2xl font-bold text-neonPurple flex items-center gap-2">
+                    <i data-lucide="terminal" class="w-6 h-6"></i> Operations & Productivity Tools
+                </h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-sm font-medium mb-1">
+                            <span>MS Office (Word, Excel, PowerPoint)</span>
+                            <span class="text-neonPurple">95%</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-neonPurple to-neonCyan w-[95%]"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-sm font-medium mb-1">
+                            <span>Data Management & Record Keeping</span>
+                            <span class="text-neonPurple">98%</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-neonPurple to-neonCyan w-[98%]"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-sm font-medium mb-1">
+                            <span>Graphic Design (Canva)</span>
+                            <span class="text-neonPurple">85%</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-neonPurple to-neonCyan w-[85%]"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-sm font-medium mb-1">
+                            <span>Operational Coordination</span>
+                            <span class="text-neonPurple">92%</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-neonPurple to-neonCyan w-[92%]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Offered -->
+    <section id="services" class="relative z-10 py-20 px-6 max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-gradient mb-12">Detailed Services Offered</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="glass-card p-6 rounded-xl space-y-3">
+                <i data-lucide="shopping-bag" class="w-8 h-8 text-neonCyan"></i>
+                <h3 class="text-xl font-bold">E-Commerce Development</h3>
+                <p class="opacity-75 text-sm">Building online stores with custom layouts, payment processing, shopping carts, and inventory controls.</p>
+            </div>
+            <div class="glass-card p-6 rounded-xl space-y-3">
+                <i data-lucide="calendar-check" class="w-8 h-8 text-neonPurple"></i>
+                <h3 class="text-xl font-bold">Appointment & Booking Platforms</h3>
+                <p class="opacity-75 text-sm">Designing interactive scheduling websites with real-time slot selection, reminders, and admin controls.</p>
+            </div>
+            <div class="glass-card p-6 rounded-xl space-y-3">
+                <i data-lucide="globe" class="w-8 h-8 text-neonCyan"></i>
+                <h3 class="text-xl font-bold">Custom WordPress Themes</h3>
+                <p class="opacity-75 text-sm">Converting static web templates into fully dynamic WordPress themes with complete admin option panels.</p>
+            </div>
+            <div class="glass-card p-6 rounded-xl space-y-3">
+                <i data-lucide="layout-grid" class="w-8 h-8 text-neonPurple"></i>
+                <h3 class="text-xl font-bold">Frontend Web Dev</h3>
+                <p class="opacity-75 text-sm">Writing clean HTML5, CSS3, JavaScript, and Tailwind CSS code for responsive modern websites.</p>
+            </div>
+            <div class="glass-card p-6 rounded-xl space-y-3">
+                <i data-lucide="shield-check" class="w-8 h-8 text-neonCyan"></i>
+                <h3 class="text-xl font-bold">Performance & Maintenance</h3>
+                <p class="opacity-75 text-sm">Optimizing loading speed, updating security configurations, and resolving technical site issues.</p>
+            </div>
+            <div class="glass-card p-6 rounded-xl space-y-3">
+                <i data-lucide="file-spreadsheet" class="w-8 h-8 text-neonPurple"></i>
+                <h3 class="text-xl font-bold">Data & Content Management</h3>
+                <p class="opacity-75 text-sm">Managing large datasets, content migration, MS Excel structuring, and administrative records.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="relative z-10 py-20 px-6 max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-gradient mb-12">Featured Project Case Studies</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- Project 1 -->
+            <div class="glass-card rounded-xl overflow-hidden group space-y-4 p-6">
+                <div class="h-40 rounded-lg bg-gradient-to-tr from-neonCyan/20 to-neonPurple/20 flex items-center justify-center">
+                    <i data-lucide="shopping-cart" class="w-12 h-12 text-neonCyan"></i>
+                </div>
+                <h3 class="text-xl font-bold">E-Commerce Retail Store</h3>
+                <p class="opacity-75 text-sm">Fully functional online store featuring custom product views, WooCommerce checkout, and payment gateways.</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="text-xs px-2 py-1 bg-white/10 rounded">WooCommerce</span>
+                    <span class="text-xs px-2 py-1 bg-white/10 rounded">WordPress</span>
+                    <span class="text-xs px-2 py-1 bg-white/10 rounded">Payment Gateway</span>
+                </div>
+                <button onclick="openModal('proj1')" class="w-full py-2 rounded-lg bg-neonCyan/10 text-neonCyan border border-neonCyan/30 hover:bg-neonCyan/20 transition text-sm font-semibold">
+                    View Project Details
+                </button>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="glass-card rounded-xl overflow-hidden group space-y-4 p-6">
+                <div class="h-40 rounded-lg bg-gradient-to-tr from-neonPurple/20 to-neonCyan/20 flex items-center justify-center">
+                    <i data-lucide="calendar" class="w-12 h-12 text-neonPurple"></i>
+                </div>
+                <h3 class="text-xl font-bold">Appointment & Booking System</h3>
+                <p class="opacity-75 text-sm">Service scheduling platform allowing users to book time slots with automated notifications and calendar sync.</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="text-xs px-2 py-1 bg-white/10 rounded">JavaScript</span>
+                    <span class="text-xs px-2 py-1 bg-white/10 rounded">Booking API</span>
+                    <span class="text-xs px-2 py-1 bg-white/10 rounded">WordPress</span>
+                </div>
+                <button onclick="openModal('proj2')" class="w-full py-2 rounded-lg bg-neonPurple/10 text-neonPurple border border-neonPurple/30 hover:bg-neonPurple/20 transition text-sm font-semibold">
+                    View Project Details
+                </button>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="glass-card rounded-xl overflow-hidden group space-y-4 p-6">
+                <div class="h-40 rounded-lg bg-gradient-to-tr from-neonCyan/20 to-neonPurple/20 flex items-center justify-center">
+                    <i data-lucide="layers" class="w-12 h-12 text-neonCyan"></i>
+                </div>
+                <h3 class="text-xl font-bold">Custom WordPress Theme</h3>
+                <p class="opacity-75 text-sm">Converted a multi-page HTML template into a modular WordPress theme with a custom admin options panel.</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="text-xs px-2 py-1 bg-white/10 rounded">PHP</span>
+                    <span class="text-xs px-2 py-1 bg-white/10 rounded">WordPress</span>
+                    <span class="text-xs px-2 py-1 bg-white/10 rounded">ACF</span>
+                </div>
+                <button onclick="openModal('proj3')" class="w-full py-2 rounded-lg bg-neonCyan/10 text-neonCyan border border-neonCyan/30 hover:bg-neonCyan/20 transition text-sm font-semibold">
+                    View Project Details
+                </button>
+            </div>
+
+            <!-- Project 4 -->
+            <div class="glass-card rounded-xl overflow-hidden group space-y-4 p-6">
+                <div class="h-40 rounded-lg bg-gradient-to-tr from-neonPurple/20 to-neonCyan/20 flex items-center justify-center">
+                    <i data-lucide="building-2" class="w-12 h-12 text-neonPurple"></i>
+                </div>
+                <h3 class="text-xl font-bold">Corporate Web Suite</h3>
+                <p class="opacity-75 text-sm">A modern corporate website designed for high speed, core web vitals performance, and SEO optimization.</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="text-xs px-2 py-1 bg-white/10 rounded">Tailwind CSS</span>
+                    <span class="text-xs px-2 py-1 bg-white/10 rounded">JavaScript</span>
+                    <span class="text-xs px-2 py-1 bg-white/10 rounded">SEO</span>
+                </div>
+                <button onclick="openModal('proj4')" class="w-full py-2 rounded-lg bg-neonPurple/10 text-neonPurple border border-neonPurple/30 hover:bg-neonPurple/20 transition text-sm font-semibold">
+                    View Project Details
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Testimonials Slider -->
+    <section id="testimonials" class="relative z-10 py-20 px-6 max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-gradient mb-12">Client Testimonials</h2>
+        
+        <div class="glass-card p-8 md:p-12 rounded-2xl relative text-center space-y-6">
+            <i data-lucide="quote" class="w-12 h-12 text-neonCyan mx-auto opacity-50"></i>
+            <p id="testimonialText" class="text-lg md:text-xl italic opacity-90 leading-relaxed min-h-[100px]">
+                "Fahad built our e-commerce store and booking system seamlessly. His attention to detail, code clarity, and admin options made running our business simple."
+            </p>
+            <div>
+                <p id="testimonialAuthor" class="font-bold text-neonCyan">Sajid Mahmood</p>
+                <p id="testimonialRole" class="text-xs opacity-75">Project Manager, Tech Solutions</p>
+            </div>
+            <div class="flex justify-center gap-4 pt-4">
+                <button onclick="prevTestimonial()" class="p-2 rounded-full bg-white/10 hover:text-neonCyan transition"><i data-lucide="chevron-left"></i></button>
+                <button onclick="nextTestimonial()" class="p-2 rounded-full bg-white/10 hover:text-neonCyan transition"><i data-lucide="chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="relative z-10 py-20 px-6 max-w-4xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-12 space-y-3">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-gradient">Frequently Asked Questions</h2>
+            <p class="opacity-75 text-sm md:text-base">
+                Common questions about my e-commerce capabilities, booking platforms, and custom WordPress theme development.
+            </p>
+        </div>
+
+        <div class="space-y-4">
+            
+            <div class="glass-card rounded-xl p-6 cursor-pointer border hover:border-neonCyan transition" onclick="toggleFaq(1)">
+                <div class="flex justify-between items-center gap-4">
+                    <h3 class="font-bold text-base md:text-lg">What kind of e-commerce websites do you develop?</h3>
+                    <i data-lucide="chevron-down" id="faqIcon1" class="transition-transform text-neonCyan shrink-0"></i>
+                </div>
+                <p id="faqAnswer1" class="hidden mt-4 text-sm opacity-80 leading-relaxed border-t border-white/10 pt-4">
+                    I build complete WooCommerce and custom e-commerce stores, including single-product sites, full retail catalogs, integrated shopping carts, payment processing (Stripe, PayPal, local gateways), order tracking, and client dashboards.
+                </p>
+            </div>
+
+            <div class="glass-card rounded-xl p-6 cursor-pointer border hover:border-neonCyan transition" onclick="toggleFaq(2)">
+                <div class="flex justify-between items-center gap-4">
+                    <h3 class="font-bold text-base md:text-lg">How do your appointment and booking websites work?</h3>
+                    <i data-lucide="chevron-down" id="faqIcon2" class="transition-transform text-neonCyan shrink-0"></i>
+                </div>
+                <p id="faqAnswer2" class="hidden mt-4 text-sm opacity-80 leading-relaxed border-t border-white/10 pt-4">
+                    I integrate interactive scheduling systems allowing your clients to pick dates, times, and services based on real-time availability. Admin dashboard controls allow you to manage schedules, block off hours, and trigger automated confirmation emails or messages.
+                </p>
+            </div>
+
+            <div class="glass-card rounded-xl p-6 cursor-pointer border hover:border-neonCyan transition" onclick="toggleFaq(3)">
+                <div class="flex justify-between items-center gap-4">
+                    <h3 class="font-bold text-base md:text-lg">Can you convert my custom HTML site into a WordPress theme with an admin panel?</h3>
+                    <i data-lucide="chevron-down" id="faqIcon3" class="transition-transform text-neonCyan shrink-0"></i>
+                </div>
+                <p id="faqAnswer3" class="hidden mt-4 text-sm opacity-80 leading-relaxed border-t border-white/10 pt-4">
+                    Yes! I convert standard static HTML/CSS files into modular WordPress themes using PHP standards (<code class="text-neonCyan">header.php</code>, <code class="text-neonCyan">footer.php</code>, <code class="text-neonCyan">page.php</code>, <code class="text-neonCyan">functions.php</code>). I add custom fields and metaboxes so you can edit images, text, and settings directly in your WordPress dashboard.
+                </p>
+            </div>
+
+            <div class="glass-card rounded-xl p-6 cursor-pointer border hover:border-neonCyan transition" onclick="toggleFaq(4)">
+                <div class="flex justify-between items-center gap-4">
+                    <h3 class="font-bold text-base md:text-lg">Will the website be 100% mobile responsive?</h3>
+                    <i data-lucide="chevron-down" id="faqIcon4" class="transition-transform text-neonCyan shrink-0"></i>
+                </div>
+                <p id="faqAnswer4" class="hidden mt-4 text-sm opacity-80 leading-relaxed border-t border-white/10 pt-4">
+                    Yes. Mobile-first design is standard across all my projects. I test layouts across smartphones, tablets, laptops, and desktop monitors to ensure responsive performance.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="relative z-10 py-20 px-6 max-w-4xl mx-auto">
+        <div class="glass-card p-8 md:p-12 rounded-2xl space-y-8">
+            <h2 class="text-3xl font-bold text-center text-gradient">Send Me A Message</h2>
+            
+            <form action="https://formspree.io/f/fahadali69277@gmail.com" method="POST" class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <input type="text" name="name" required placeholder="Your Name" class="w-full px-4 py-3 rounded-lg bg-black/10 dark:bg-cyberDark/80 border border-white/10 focus:border-neonCyan outline-none transition">
+                    <input type="email" name="_replyto" required placeholder="Your Email" class="w-full px-4 py-3 rounded-lg bg-black/10 dark:bg-cyberDark/80 border border-white/10 focus:border-neonCyan outline-none transition">
+                </div>
+                <input type="text" name="_subject" required placeholder="Subject (E-commerce / Booking / Custom Theme)" class="w-full px-4 py-3 rounded-lg bg-black/10 dark:bg-cyberDark/80 border border-white/10 focus:border-neonCyan outline-none transition">
+                <textarea name="message" rows="5" required placeholder="Your Message" class="w-full px-4 py-3 rounded-lg bg-black/10 dark:bg-cyberDark/80 border border-white/10 focus:border-neonCyan outline-none transition"></textarea>
+                
+                <button type="submit" class="w-full py-4 rounded-lg bg-gradient-to-r from-neonCyan to-neonPurple text-cyberDark font-bold text-lg hover:opacity-95 transition shadow-neon-cyan flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-5 h-5"></i> Send Message
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Modal Dialog Pop-up -->
+    <div id="projectModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-6">
+        <div class="glass-card max-w-2xl w-full p-8 rounded-2xl space-y-6 relative border border-neonCyan/40">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i data-lucide="x"></i></button>
+            <h3 id="modalTitle" class="text-2xl font-bold text-gradient">Project Details</h3>
+            <p id="modalDescription" class="opacity-80 leading-relaxed text-sm"></p>
+            <div id="modalTech" class="flex flex-wrap gap-2"></div>
+            <button onclick="closeModal()" class="px-6 py-2 rounded-lg bg-neonCyan text-cyberDark font-bold">Close Details</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-white/10 py-8 text-center text-sm opacity-60">
+        <p>&copy; FA Tech Studio. Designed & Developed by Fahad Ali.</p>
+    </footer>
+
+    <!-- Interactive JavaScript Logic -->
+    <script>
+        lucide.createIcons();
+
+        // Dark / Light Theme Toggle
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+        const htmlElement = document.documentElement;
+
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        if (currentTheme === 'light') {
+            htmlElement.classList.remove('dark');
+            htmlElement.classList.add('light');
+            document.body.classList.replace('bg-cyberDark', 'bg-cyberLight');
+            document.body.classList.replace('text-slate-100', 'text-slate-900');
+            sunIcon.classList.remove('hidden');
+            moonIcon.classList.add('hidden');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                htmlElement.classList.add('light');
+                document.body.classList.replace('bg-cyberDark', 'bg-cyberLight');
+                document.body.classList.replace('text-slate-100', 'text-slate-900');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlElement.classList.remove('light');
+                htmlElement.classList.add('dark');
+                document.body.classList.replace('bg-cyberLight', 'bg-cyberDark');
+                document.body.classList.replace('text-slate-900', 'text-slate-100');
+                moonIcon.classList.remove('hidden');
+                sunIcon.classList.add('hidden');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Spotlight Effect
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        window.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            document.body.style.setProperty('--x', mouseX + 'px');
+            document.body.style.setProperty('--y', mouseY + 'px');
+        });
+
+        // Typewriter Effect
+        const roles = ["E-Commerce Developer", "WordPress Specialist", "Appointment Platforms Developer", "Frontend Specialist"];
+        let roleIndex = 0, charIndex = 0, isDeleting = false;
+        const target = document.getElementById("typewriter");
+
+        function type() {
+            const currentRole = roles[roleIndex];
+            if (isDeleting) {
+                target.textContent = currentRole.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                target.textContent = currentRole.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            if (!isDeleting && charIndex === currentRole.length) {
+                isDeleting = true;
+                setTimeout(type, 1500);
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                roleIndex = (roleIndex + 1) % roles.length;
+                setTimeout(type, 500);
+            } else {
+                setTimeout(type, isDeleting ? 50 : 100);
+            }
+        }
+        type();
+
+        // Project Modal Pop-Up Data
+        const projectsData = {
+            proj1: {
+                title: "E-Commerce Retail Storefront",
+                desc: "Built a high-converting e-commerce retail store with WooCommerce, custom single product design templates, cart overlays, and multi-currency payment options.",
+                tech: ["WooCommerce", "WordPress", "Payment Gateways", "CSS3"]
+            },
+            proj2: {
+                title: "Appointment & Booking Application",
+                desc: "Developed an automated service scheduling web app featuring calendar time slot reservations, automated confirmation notifications, and admin calendar control.",
+                tech: ["JavaScript", "Booking Engine", "WordPress", "PHP"]
+            },
+            proj3: {
+                title: "Custom WordPress Theme Conversion",
+                desc: "Converted a multi-page static HTML template into a modular WordPress theme featuring dynamic navigation menus, custom fields, and dashboard option controls.",
+                tech: ["PHP", "WordPress", "ACF", "HTML5/CSS3"]
+            },
+            proj4: {
+                title: "Corporate Web Suite",
+                desc: "Designed and implemented a fast, responsive corporate web portal optimized for Google Core Web Vitals performance and search engines.",
+                tech: ["Tailwind CSS", "JavaScript", "PHP", "SEO"]
+            }
+        };
+
+        function openModal(id) {
+            const p = projectsData[id];
+            document.getElementById('modalTitle').textContent = p.title;
+            document.getElementById('modalDescription').textContent = p.desc;
+            document.getElementById('modalTech').innerHTML = p.tech.map(t => `<span class="px-3 py-1 bg-neonCyan/20 text-neonCyan rounded-full text-xs">${t}</span>`).join('');
+            document.getElementById('projectModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('projectModal').classList.add('hidden');
+        }
+
+        // Testimonial Controls
+        const testimonials = [
+            { quote: "Fahad built our e-commerce store and booking system seamlessly. His attention to detail, code clarity, and admin options made running our business simple.", author: "Sajid Mahmood", role: "Project Lead, Tech Solutions" },
+            { quote: "Outstanding WordPress theme development! Fahad took static web mockups and created a working WordPress site with dynamic admin options.", author: "Aamir Khan", role: "Director, Digital Agency" },
+            { quote: "Highly competent developer who delivered our appointment booking platform accurately and on schedule.", author: "Dr. Rashid Ali", role: "Academic Coordinator" }
+        ];
+        let testIdx = 0;
+
+        function updateTestimonial() {
+            document.getElementById('testimonialText').textContent = `"${testimonials[testIdx].quote}"`;
+            document.getElementById('testimonialAuthor').textContent = testimonials[testIdx].author;
+            document.getElementById('testimonialRole').textContent = testimonials[testIdx].role;
+        }
+
+        function nextTestimonial() {
+            testIdx = (testIdx + 1) % testimonials.length;
+            updateTestimonial();
+        }
+
+        function prevTestimonial() {
+            testIdx = (testIdx - 1 + testimonials.length) % testimonials.length;
+            updateTestimonial();
+        }
+
+        // FAQ Toggle
+        function toggleFaq(num) {
+            const answer = document.getElementById(`faqAnswer${num}`);
+            const icon = document.getElementById(`faqIcon${num}`);
+            answer.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        }
+
+        // Canvas Particle Background
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let particles = [];
+        const particleCount = 80;
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.7,
+                vy: (Math.random() - 0.5) * 0.7,
+                size: Math.random() * 2 + 1
+            });
+        }
+
+        function renderLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.fillStyle = htmlElement.classList.contains('dark') ? '#00E5FF' : '#7C3AED';
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dist < 120) {
+                        ctx.strokeStyle = htmlElement.classList.contains('dark') 
+                            ? `rgba(0, 229, 255, ${1 - dist / 120})` 
+                            : `rgba(124, 58, 237, ${(1 - dist / 120) * 0.5})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+
+                let mDist = Math.hypot(p.x - mouseX, p.y - mouseY);
+                if (mDist < 150) {
+                    ctx.strokeStyle = htmlElement.classList.contains('dark') 
+                        ? `rgba(0, 229, 255, ${1 - mDist / 150})` 
+                        : `rgba(124, 58, 237, ${1 - mDist / 150})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(mouseX, mouseY);
+                    ctx.stroke();
+                }
+            }
+
+            requestAnimationFrame(renderLoop);
+        }
+        renderLoop();
+    </script>
+</body>
+</html>
